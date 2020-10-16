@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MatchThree.Interface
+namespace Shared.Interface
 {
     public interface IDrawable
     {

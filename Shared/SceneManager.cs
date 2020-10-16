@@ -1,8 +1,8 @@
-﻿using MatchThree.Interface;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Shared.Interface;
 
-namespace MatchThree
+namespace Shared
 {
     public static class SceneManager
     {
@@ -17,14 +17,13 @@ namespace MatchThree
 
         public static void LoadContent()
         {
-            if (!_currentScene.IsLoaded)
-                _currentScene.LoadContent();
+            AutoFacFactory.Build();
+            _currentScene.LoadContent();
         }
 
         public static void UnloadContent()
         {
-            if (_currentScene.IsLoaded)
-                _currentScene.UnloadContent();
+            _currentScene.UnloadContent();
         }
 
         public static void Update(GameTime gameTime)

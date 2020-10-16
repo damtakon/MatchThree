@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MatchThree.Interface
+namespace Shared.Interface
 {
     public interface IUpdatable
     {

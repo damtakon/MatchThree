@@ -1,9 +1,7 @@
-﻿namespace MatchThree.Interface
+﻿namespace Shared.Interface
 {
-    public interface IGameScene : IUpdatable, IDrawable
+    public interface IGameScene : IUpdateDrawable
     {
-        bool IsLoaded { get; }
-
         /// <summary>
         /// Load needed content for current scene
         /// </summary>
