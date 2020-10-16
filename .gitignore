@@ -1,0 +1,7 @@
+/.git/
+/.vs/
+/*/Publish/
+/*/bin/
+/*/obj/
+/packages/
+/.idea/
