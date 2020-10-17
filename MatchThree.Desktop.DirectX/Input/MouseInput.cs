@@ -11,15 +11,18 @@ namespace MatchThree.Desktop.DirectX.Input
         private MouseState _state;
         private Vector2? _startPressed;
         private Vector2 _position;
+        private readonly GameWindow _window;
 
-        public MouseInput(Texture2D texture2D)
+        public MouseInput(Texture2D texture2D, GameWindow window)
         {
             _texture2D = texture2D;
+            // Fix MonoGame Mouse always 0,0 position TODO: Find normal fix c:
+            _window = window;
         }
 
         public override void Update(GameTime gameTime)
         {
-            var currentState = Mouse.GetState();
+            var currentState = Mouse.GetState(_window);
             var currentPosition = currentState.Position.ToVector2();
             if (!_position.Equals(currentPosition))
             {
@@ -38,7 +41,6 @@ namespace MatchThree.Desktop.DirectX.Input
                 if (_state.LeftButton == ButtonState.Pressed)
                     OnPress(_position);
             }
-
 
             _state = currentState;
         }

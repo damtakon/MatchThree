@@ -16,8 +16,8 @@ namespace MatchThree.Core.Scene
             base.LoadContent(contentManager);
             _background = Content.Load<Texture2D>(GameResource.BackgroundPath);
             var font = Content.Load<SpriteFont>(GameResource.FontPath);
-            using var scope = AutoFacFactory.Container.BeginLifetimeScope();
-            _vectorInput = scope.Resolve<VectorInput>();
+            using (var scope = AutoFacFactory.Container.BeginLifetimeScope())
+                _vectorInput = scope.Resolve<VectorInput>();
         }
 
         public override void UnloadContent()

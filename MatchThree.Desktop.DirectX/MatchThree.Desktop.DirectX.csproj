@@ -11,12 +11,9 @@
 		<ApplicationIcon>Icon.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Content\bin\**" />
-	  <Compile Remove="Content\obj\**" />
-	  <EmbeddedResource Remove="Content\bin\**" />
-	  <EmbeddedResource Remove="Content\obj\**" />
-	  <None Remove="Content\bin\**" />
-	  <None Remove="Content\obj\**" />
+		<MonoGameContentReference Include="..\MatchThree.Core\Content\Content.mgcb">
+			<Link>Content\Content.mgcb</Link>
+		</MonoGameContentReference>
 	</ItemGroup>
 	<ItemGroup>
 		<TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
@@ -26,11 +23,14 @@
 		<PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
 	</ItemGroup>
 	<ItemGroup>
-		<MonoGameContentReference Include="..\MatchThree.Core\Content\Content.mgcb">
-			<Link>Content\Content.mgcb</Link>
-		</MonoGameContentReference>
+		<ProjectReference Include="..\MatchThree.Core\MatchThree.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\MatchThree.Core\MatchThree.Core.csproj" />
+	  <Compile Remove="Content\bin\**" />
+	  <Compile Remove="Content\obj\**" />
+	  <EmbeddedResource Remove="Content\bin\**" />
+	  <EmbeddedResource Remove="Content\obj\**" />
+	  <None Remove="Content\bin\**" />
+	  <None Remove="Content\obj\**" />
 	</ItemGroup>
 </Project>

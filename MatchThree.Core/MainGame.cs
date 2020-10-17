@@ -10,14 +10,14 @@ namespace MatchThree.Core
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Action<ContentManager> _loadContent;
-        private Action _autoFacInit;
+        private Action<GameWindow> _autoFacInit;
 
         /// <summary>
         /// Main game scene
         /// </summary>
         /// <param name="loadContent">Action for loading any instance if needed (can be null)</param>
         /// <param name="autoFacInit">Action for autofac initialize any instance if needed (can be null)</param>
-        public MainGame(Action<ContentManager> loadContent = null, Action autoFacInit = null)
+        public MainGame(Action<ContentManager> loadContent = null, Action<GameWindow> autoFacInit = null)
         {
             //Main graphics settings
             _graphics = new GraphicsDeviceManager(this)
@@ -26,7 +26,6 @@ namespace MatchThree.Core
                 PreferredBackBufferHeight = 1080
             };
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
             Window.Title = "Simple Match Three for Game Forest";
             Window.IsBorderless = false;
             Window.AllowAltF4 = false;
@@ -45,7 +44,7 @@ namespace MatchThree.Core
         {
             _loadContent?.Invoke(Content);
             _loadContent = null;
-            _autoFacInit?.Invoke();
+            _autoFacInit?.Invoke(Window);
             _autoFacInit = null;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SceneManager.LoadContent(Content);
