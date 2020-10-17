@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MatchThree.Desktop
+namespace MatchThree.Desktop.DirectX
 {
     public static class Content
     {

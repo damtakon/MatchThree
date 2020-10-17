@@ -1,7 +1,7 @@
 ﻿using System;
-using Shared;
+using MatchThree.Core;
 
-namespace MatchThree.Desktop
+namespace MatchThree.Desktop.DirectX
 {
     public static class Program
     {

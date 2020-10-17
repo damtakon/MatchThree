@@ -1,9 +1,8 @@
-﻿using System.Threading;
-using MatchThree.Desktop.Input;
-using Shared;
-using Shared.Input;
+﻿using MatchThree.Core;
+using MatchThree.Core.Input;
+using MatchThree.Desktop.DirectX.Input;
 
-namespace MatchThree.Desktop
+namespace MatchThree.Desktop.DirectX
 {
     public static class AutoFacDesktop
     {
