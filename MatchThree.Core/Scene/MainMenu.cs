@@ -1,11 +1,10 @@
 ﻿using Autofac;
-using Autofac.Core;
+using MatchThree.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Shared.Input;
 
-namespace Shared.Scene
+namespace MatchThree.Core.Scene
 {
     public class MainMenu : GameSceneBase
     {

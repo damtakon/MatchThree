@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatchThree.Core.Interface;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Shared.Interface;
 
-namespace Shared.Scene
+namespace MatchThree.Core.Scene
 {
     public abstract class GameSceneBase : IUpdateDrawable
     {

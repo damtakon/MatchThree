@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatchThree.Core.Interface;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Shared.Interface;
 
-namespace Shared.Input
+namespace MatchThree.Core.Input
 {
     public abstract class VectorInput : IUpdateDrawable
     {

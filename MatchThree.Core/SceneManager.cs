@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MatchThree.Core.Scene;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Shared.Interface;
-using Shared.Scene;
 
-namespace Shared
+namespace MatchThree.Core
 {
     public static class SceneManager
     {

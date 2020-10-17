@@ -2,7 +2,7 @@
 using Autofac;
 using IContainer = Autofac.IContainer;
 
-namespace Shared
+namespace MatchThree.Core
 {
     public static class AutoFacFactory
     {
