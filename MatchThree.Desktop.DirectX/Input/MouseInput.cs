@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shared.Input;
 
-namespace MatchThree.Desktop.Input
+namespace MatchThree.Desktop.DirectX.Input
 {
     public class MouseInput : VectorInput
     {

@@ -9,8 +9,8 @@
     <CharacterRegions>
       <CharacterRegion>
 	  <!-- English and Digits  -->
-        <Start>&#41;</Start>
-        <End>&#177;</End>
+        <Start>&#32;</Start>
+        <End>&#126;</End>
       </CharacterRegion>
     </CharacterRegions>
   </Asset>

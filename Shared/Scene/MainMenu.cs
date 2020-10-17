@@ -1,26 +1,43 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Autofac;
+using Autofac.Core;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Shared.Interface;
+using Shared.Input;
 
 namespace Shared.Scene
 {
-    public class MainMenu : IGameScene
+    public class MainMenu : GameSceneBase
     {
+        private Texture2D _background;
+        private VectorInput _vectorInput;
 
-        public void Update(GameTime gameTime)
+        public override void LoadContent(ContentManager contentManager)
         {
+            base.LoadContent(contentManager);
+            _background = Content.Load<Texture2D>(GameResource.BackgroundPath);
+            var font = Content.Load<SpriteFont>(GameResource.FontPath);
+            using var scope = AutoFacFactory.Container.BeginLifetimeScope();
+            _vectorInput = scope.Resolve<VectorInput>();
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void UnloadContent()
         {
+            base.UnloadContent();
+            _background = null;
         }
 
-        public void LoadContent()
+        public override void Update(GameTime gameTime)
         {
+            _vectorInput.Update(gameTime);
         }
 
-        public void UnloadContent()
+        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            spriteBatch.Begin();
+            spriteBatch.Draw(_background, Vector2.Zero, Color.White);
+            _vectorInput.Draw(spriteBatch, gameTime);
+            spriteBatch.End();
         }
     }
 }

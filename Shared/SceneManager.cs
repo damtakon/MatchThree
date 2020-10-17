@@ -1,24 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Shared.Interface;
+using Shared.Scene;
 
 namespace Shared
 {
     public static class SceneManager
     {
-        private static IGameScene _currentScene;
+        private static GameSceneBase _currentScene;
+        private static ContentManager _contentManager;
 
         /// <summary>
         /// Init all scene and main scene
         /// </summary>
         public static void Init()
         {
+            _currentScene = new MainMenu();
         }
 
-        public static void LoadContent()
+        public static void LoadContent(ContentManager contentManager)
         {
             AutoFacFactory.Build();
-            _currentScene.LoadContent();
+            _contentManager = contentManager;
+            _currentScene.LoadContent(contentManager);
         }
 
         public static void UnloadContent()

@@ -19,22 +19,24 @@ namespace Shared
         /// <param name="autoFacInit">Action for autofac initialize any instance if needed (can be null)</param>
         public MainGame(Action<ContentManager> loadContent = null, Action autoFacInit = null)
         {
-            _graphics = new GraphicsDeviceManager(this);
+            //Main graphics settings
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 1920, 
+                PreferredBackBufferHeight = 1080
+            };
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+            Window.Title = "Simple Match Three for Game Forest";
+            Window.IsBorderless = false;
+            Window.AllowAltF4 = false;
             _loadContent = loadContent;
             _autoFacInit = autoFacInit;
+            
         }
 
         protected override void Initialize()
         {
-            //Main graphics settings
-            Window.Title = "Simple Match Three for Game Forest";
-            Window.Position = new Point(0, 0);
-            Window.IsBorderless = true;
-            Window.AllowAltF4 = false;
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.ApplyChanges();
             SceneManager.Init();
             base.Initialize();
         }
@@ -46,7 +48,7 @@ namespace Shared
             _autoFacInit?.Invoke();
             _autoFacInit = null;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            SceneManager.LoadContent();
+            SceneManager.LoadContent(Content);
         }
 
         protected override void UnloadContent()
