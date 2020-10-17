@@ -25,9 +25,9 @@ namespace MatchThree.Core.Control
             ClickAction = clickAction;
             VectorInput = vectorInput;
             Position = position;
-            CurrentColor = DefaultColor;
             DefaultColor = defaultColor ?? Color.White;
             HoverColor = hoverColor ?? Color.Red;
+            CurrentColor = DefaultColor;
             TextRefresh(text);
             Subscribe();
         }
