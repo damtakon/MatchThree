@@ -11,6 +11,8 @@ namespace MatchThree.Core
         private SpriteBatch _spriteBatch;
         private Action<ContentManager> _loadContent;
         private Action<GameWindow> _autoFacInit;
+        private Texture2D _background;
+        private Matrix _transformMatrix;
 
         /// <summary>
         /// Main game scene
@@ -22,12 +24,26 @@ namespace MatchThree.Core
             //Main graphics settings
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = 1920, 
-                PreferredBackBufferHeight = 1080
+                PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
             };
+
+            //_graphics = new GraphicsDeviceManager(this)
+            //{
+            //    PreferredBackBufferWidth = 1920,
+            //    PreferredBackBufferHeight = 1080
+            //};
+
+            var scaleX = _graphics.PreferredBackBufferWidth / Global.VirtualWidth;
+            var scaleY = _graphics.PreferredBackBufferHeight / Global.VirtualHeight;
+            var scaleX2 = Global.VirtualWidth / _graphics.PreferredBackBufferWidth;
+            var scaleY2 = Global.VirtualHeight / _graphics.PreferredBackBufferHeight;
+            _transformMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            Global.ScaleMatrix = Matrix.CreateScale(scaleX2, scaleY2, 1.0f);
             Content.RootDirectory = "Content";
             Window.Title = "Simple Match Three for Game Forest";
-            Window.IsBorderless = false;
+            Window.Position = Point.Zero;
+            Window.IsBorderless = true;
             Window.AllowAltF4 = false;
             _loadContent = loadContent;
             _autoFacInit = autoFacInit;
@@ -47,6 +63,7 @@ namespace MatchThree.Core
             _autoFacInit?.Invoke(Window);
             _autoFacInit = null;
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _background = Content.Load<Texture2D>(GameResource.BackgroundPath);
             SceneManager.LoadContent(Content);
         }
 
@@ -65,7 +82,10 @@ namespace MatchThree.Core
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Transparent);
+            _spriteBatch.Begin(transformMatrix: _transformMatrix);
+            _spriteBatch.Draw(_background, Vector2.Zero, Color.White);
             SceneManager.Draw(_spriteBatch, gameTime);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

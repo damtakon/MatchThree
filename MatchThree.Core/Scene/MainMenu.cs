@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using MatchThree.Core.Control;
 using MatchThree.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -8,35 +10,32 @@ namespace MatchThree.Core.Scene
 {
     public class MainMenu : GameSceneBase
     {
-        private Texture2D _background;
-        private VectorInput _vectorInput;
-
         public override void LoadContent(ContentManager contentManager)
         {
             base.LoadContent(contentManager);
-            _background = Content.Load<Texture2D>(GameResource.BackgroundPath);
             var font = Content.Load<SpriteFont>(GameResource.FontPath);
+            VectorInput vectorInput;
             using (var scope = AutoFacFactory.Container.BeginLifetimeScope())
-                _vectorInput = scope.Resolve<VectorInput>();
+                vectorInput = scope.Resolve<VectorInput>();
+            var buttonText = "Play";
+            var center = Global.VirtualWidth / 2 - font.MeasureString(buttonText).X / 2;
+            var play = new Button(font, vectorInput, PlayClicked, buttonText, new Vector2(center, 1470));
+            var closeText = "X";
+            var close = new Button(font, vectorInput, CloseClicked, closeText, new Vector2(Global.VirtualWidth - font.MeasureString(closeText).X, 0));
+
+            UpdateDrawables.Add(play);
+            UpdateDrawables.Add(close);
+            UpdateDrawables.Add(vectorInput);
         }
 
-        public override void UnloadContent()
+        private void CloseClicked()
         {
-            base.UnloadContent();
-            _background = null;
+            Environment.Exit(0);
         }
 
-        public override void Update(GameTime gameTime)
+        private void PlayClicked()
         {
-            _vectorInput.Update(gameTime);
-        }
 
-        public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            spriteBatch.Begin();
-            spriteBatch.Draw(_background, Vector2.Zero, Color.White);
-            _vectorInput.Draw(spriteBatch, gameTime);
-            spriteBatch.End();
         }
     }
 }
