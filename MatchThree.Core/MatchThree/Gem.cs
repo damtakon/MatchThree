@@ -2,6 +2,7 @@
 using MatchThree.Core.Enum;
 using MatchThree.Core.Extension;
 using MatchThree.Core.Interface;
+using MatchThree.Core.MatchThree.Bonus;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,12 +17,17 @@ namespace MatchThree.Core.MatchThree
         protected Rectangle EndPosition;
         protected GemState GemState;
         protected int Speed = 1000;
-        public int XPosition;
-        public int YPosition;
         protected Color GemColor;
         protected float DestroyStep;
 
+        public int XPosition;
+        public int YPosition;
+        public GemBonusBase Bonus;
+        public Rectangle GemBox => Box;
+        public GemState GetState => GemState;
+
         public delegate void ChangeGemStateHandler(Gem gem, GemState lastState, GemState currentState);
+
         public event ChangeGemStateHandler ChangeGemState;
 
         public Gem(Texture2D texture2D, Rectangle startPosition, Rectangle endPosition)
@@ -41,20 +47,21 @@ namespace MatchThree.Core.MatchThree
             switch (GemState)
             {
                 case GemState.Swap:
-                case GemState.Move: 
+                case GemState.Move:
                     Move(gameTime, ref Position.Y, ref EndPosition.Y);
                     Move(gameTime, ref Position.X, ref EndPosition.X);
                     Box.SetXY(Position);
+                    Bonus?.ChangePosition(Box);
                     if (Math.Abs(Position.Y - EndPosition.Y) < 0.1 && Math.Abs(Position.X - EndPosition.X) < 0.1)
                         ChangeState(GemState.Idle);
                     break;
                 case GemState.Destroy:
-                    var step = (float)gameTime.ElapsedGameTime.TotalSeconds * DestroyStep;
+                    var step = (float) gameTime.ElapsedGameTime.TotalSeconds * DestroyStep;
                     Position.Add(step);
                     Size.Sub(step);
                     Size.Sub(step);
                     Box.SetXYWH(Position, Size);
-                    if(Size.X < 5)
+                    if (Size.X < 5)
                         ChangeState(GemState.Idle);
                     break;
             }
@@ -73,8 +80,8 @@ namespace MatchThree.Core.MatchThree
             {
                 var plus = end - start > 0;
                 var step = plus
-                    ? (float)gameTime.ElapsedGameTime.TotalSeconds * Speed
-                    : -(float)gameTime.ElapsedGameTime.TotalSeconds * Speed;
+                    ? (float) gameTime.ElapsedGameTime.TotalSeconds * Speed
+                    : -(float) gameTime.ElapsedGameTime.TotalSeconds * Speed;
                 if (plus && end < start + step)
                     start = end;
                 else if (!plus && end > start + step)
@@ -100,6 +107,12 @@ namespace MatchThree.Core.MatchThree
 
         public void Move(int x, int y, Rectangle position, GemState state)
         {
+            if (Bonus != null)
+            {
+                Bonus.XPosition = x;
+                Bonus.YPosition = y;
+            }
+
             XPosition = x;
             YPosition = y;
             GemState = state;
@@ -114,6 +127,7 @@ namespace MatchThree.Core.MatchThree
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.Draw(Texture2D, Box, GemColor);
+            Bonus?.Draw(spriteBatch, gameTime);
         }
 
         public bool Equals(Gem other)
@@ -127,13 +141,13 @@ namespace MatchThree.Core.MatchThree
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Gem) obj);
         }
 
         public override int GetHashCode()
         {
-            return (Texture2D != null ? Texture2D.GetHashCode() : 0);
+            return Texture2D != null ? Texture2D.GetHashCode() : 0;
         }
 
         public override string ToString()

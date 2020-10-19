@@ -22,12 +22,21 @@ namespace MatchThree.Core.MatchThree
             LastScore = 0;
         }
 
+        public void GemDestroy(object sender, EventArgs e)
+        {
+            AddPoints(3);
+        }
+
         public void LineDestroy(object sender, LineDestroyEventArgs args)
         {
-            var newPoints = Math.Pow(3, args.Line.Count);
-            _addValue += newPoints;
+            AddPoints((int) Math.Pow(3, args.Line.Count));
+        }
+
+        private void AddPoints(int points)
+        {
+            _addValue += points;
             _stepValue = _addValue * 0.5;
-            LastScore += newPoints;
+            LastScore += points;
         }
 
         public void Update(GameTime gameTime)

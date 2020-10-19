@@ -6,8 +6,9 @@ using MatchThree.Core.MatchThree.Bonus;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-#if DEBUG
 using MatchThree.Core.Enum;
+
+#if DEBUG
 using Microsoft.Xna.Framework.Input;
 
 #endif
@@ -36,8 +37,10 @@ namespace MatchThree.Core.Scene
             _score = new Score(font, new Rectangle(2790, 50, 1000, 200));
             var timer = new Timer(font, new Rectangle(2790, 500, 1000, 200), OnTimeExpired, 60);
 
-            var lineBonusFactory = new LineBonusFactory();
-            var bombBonusFactory = new BombBonusFactory();
+            var lineBonusFactory = new LineBonusFactory(Content.Load<Texture2D>(GameResource.LineHorizontalPath),
+                Content.Load<Texture2D>(GameResource.LineVerticalPath),
+                Content.Load<Texture2D>(GameResource.BreakerPath));
+            var bombBonusFactory = new BombBonusFactory(Content.Load<Texture2D>(GameResource.BombPath));
             _bonusFactories.Add(bombBonusFactory);
             _bonusFactories.Add(lineBonusFactory);
 
@@ -47,6 +50,7 @@ namespace MatchThree.Core.Scene
             foreach (var bonus in _bonusFactories)
                 _board.LineDestroy += bonus.LineDestroy;
             _board.LineDestroy += _score.LineDestroy;
+            _board.GemDestroy += _score.GemDestroy;
 
             UpdateDrawables.Add(timer);
             UpdateDrawables.Add(_score);

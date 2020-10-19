@@ -5,6 +5,7 @@ using MatchThree.Core.Enum;
 using MatchThree.Core.Extension;
 using MatchThree.Core.Input;
 using MatchThree.Core.Interface;
+using MatchThree.Core.MatchThree.Bonus;
 using MatchThree.Core.MatchThree.Event;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,8 +33,12 @@ namespace MatchThree.Core.MatchThree
         protected int Columns;
         protected BoardState BoardState;
         protected VectorInput VectorInput;
+        protected List<GemBonusBase> Bonuses = new List<GemBonusBase>();
+        protected List<GemBonusBase> RemoveBonuses = new List<GemBonusBase>();
+        protected List<GemBonusBase> AddBonuses = new List<GemBonusBase>();
 
         public event EventHandler<LineDestroyEventArgs> LineDestroy;
+        public event EventHandler GemDestroy;
 
         public Board(Texture2D cellTexture2D, Rectangle boardContainer, int lines, int columns, IGemFactory gemFactory,
             VectorInput vectorInput)
@@ -89,7 +94,8 @@ namespace MatchThree.Core.MatchThree
                 GemOnDestroy--;
                 Gems[gem.XPosition, gem.YPosition].ChangeGemState -= OnChangeGemState;
                 Gems[gem.XPosition, gem.YPosition] = null;
-                if (GemOnDestroy == 0 && BoardState == BoardState.Destroy)
+                OnGemDestroy();
+                if (Bonuses.Count == 0 && GemOnDestroy == 0 && BoardState == BoardState.Destroy)
                     CreateNew();
             }
         }
@@ -217,6 +223,8 @@ namespace MatchThree.Core.MatchThree
             foreach (var destroy in lists)
             {
                 BoardState = BoardState.Destroy;
+
+                GetBonus(destroy.Trigger);
                 LineDestroy?.Invoke(this, destroy);
                 foreach (var dGem in destroy.Line)
                 {
@@ -228,8 +236,7 @@ namespace MatchThree.Core.MatchThree
                     }
                     else
                     {
-                        GemOnDestroy++;
-                        dGem.Destroy();
+                        DestroyGem(dGem);
                     }
 
                     destroyed.Add(dGem);
@@ -268,6 +275,24 @@ namespace MatchThree.Core.MatchThree
         {
             foreach (var gem in Gems)
                 gem?.Update(gameTime);
+            foreach (var bonus in Bonuses)
+                bonus.Update(gameTime, Cells);
+
+            if (RemoveBonuses.Count > 0)
+            {
+                foreach (var bonus in RemoveBonuses)
+                    Bonuses.Remove(bonus);
+                RemoveBonuses.Clear();
+            }
+
+            if (AddBonuses.Count > 0)
+            {
+                Bonuses.AddRange(AddBonuses);
+                AddBonuses.Clear();
+            }
+
+            if (BoardState == BoardState.Destroy && Bonuses.Count == 0 && GemOnDestroy == 0)
+                CreateNew();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -276,6 +301,8 @@ namespace MatchThree.Core.MatchThree
                 spriteBatch.Draw(CellTexture2D, cell, Color.White);
             foreach (var gem in Gems)
                 gem?.Draw(spriteBatch, gameTime);
+            foreach (var bonus in Bonuses)
+                bonus.Draw(spriteBatch, gameTime);
         }
 
         protected virtual (bool, Gem) Left(Gem gem, int number)
@@ -304,13 +331,56 @@ namespace MatchThree.Core.MatchThree
             return (gem.Equals(nextGem), nextGem);
         }
 
+        protected void GetBonus(Gem gem)
+        {
+            if (gem.Bonus != null)
+            {
+                AddBonuses.Add(gem.Bonus);
+                gem.Bonus.ChangeGemBonusState += BonusOnChangeGemBonusState;
+                gem.Bonus = null;
+            }
+        }
+
+        private void BonusOnChangeGemBonusState(GemBonusBase gemBonus, GemBonusState currentState)
+        {
+            if (currentState == GemBonusState.Finish)
+                RemoveBonuses.Add(gemBonus);
+        }
+
+        protected void DestroyGem(Gem gem)
+        {
+            if(gem == null)
+                return;
+
+            if (gem.GetState != GemState.Destroy)
+            {
+                GetBonus(gem);
+                GemOnDestroy++;
+                gem.Destroy();
+            }
+        }
+
+        public void DestroyGem(int x, int y)
+        {
+            DestroyGem(Gems[x, y]);
+        }
+
         public void Dispose()
         {
             //Fix Memory leak observers
             VectorInput.Press -= VectorInputOnPress;
             foreach (var gem in Gems)
-                gem.ChangeGemState -= OnChangeGemState;
+                if (gem != null)
+                    gem.ChangeGemState -= OnChangeGemState;
+            foreach (var bonus in Bonuses)
+                bonus.ChangeGemBonusState -= BonusOnChangeGemBonusState;
+            foreach (var bonus in AddBonuses)
+                bonus.ChangeGemBonusState -= BonusOnChangeGemBonusState;
+        }
 
+        protected virtual void OnGemDestroy()
+        {
+            GemDestroy?.Invoke(this, EventArgs.Empty);
         }
     }
 }

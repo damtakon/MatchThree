@@ -11,5 +11,9 @@
         public const string Gem4Path = @"Image\gem4";
         public const string Gem5Path = @"Image\gem5";
         public const string Gem6Path = @"Image\gem6";
+        public const string BombPath = @"Image\bomb";
+        public const string LineHorizontalPath = @"Image\lineH";
+        public const string LineVerticalPath = @"Image\lineV";
+        public const string BreakerPath = @"Image\breaker";
     }
 }
