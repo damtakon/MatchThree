@@ -25,7 +25,8 @@ namespace MatchThree.Core
             _gameScenes = new Dictionary<SceneEnum, GameSceneBase>
             {
                 {SceneEnum.MainMenu, new MainMenu()},
-                {SceneEnum.LevelOne, new LevelOne()}
+                {SceneEnum.LevelOne, new LevelOne()},
+                {SceneEnum.GameOver, new GameOver()}
             };
 
         }

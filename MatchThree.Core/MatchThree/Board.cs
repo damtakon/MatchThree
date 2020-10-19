@@ -33,7 +33,7 @@ namespace MatchThree.Core.MatchThree
         protected BoardState BoardState;
         protected VectorInput VectorInput;
 
-        protected event EventHandler<LineDestroyEventArgs> LineDestroy;
+        public event EventHandler<LineDestroyEventArgs> LineDestroy;
 
         public Board(Texture2D cellTexture2D, Rectangle boardContainer, int lines, int columns, IGemFactory gemFactory,
             VectorInput vectorInput)

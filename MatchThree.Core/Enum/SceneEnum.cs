@@ -3,6 +3,7 @@
     public enum SceneEnum
     {
         MainMenu,
-        LevelOne
+        LevelOne,
+        GameOver
     }
 }

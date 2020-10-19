@@ -1,7 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
 
 namespace MatchThree.Core.Extension
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class VectorExtension
     {
         public static void Add(this ref Vector2 vector, float num)
@@ -14,6 +16,12 @@ namespace MatchThree.Core.Extension
         {
             vector.X -= num;
             vector.Y -= num;
+        }
+
+        public static void SetXY(this ref Vector2 vector, Rectangle rectangle)
+        {
+            vector.X = rectangle.X;
+            vector.Y = rectangle.Y;
         }
 
         public static Rectangle CreateRectangle(this ref Vector2 vector, int width, int height)
