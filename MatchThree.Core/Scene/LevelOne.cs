@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MatchThree.Core.Enum;
 using MatchThree.Core.Input;
 using MatchThree.Core.MatchThree;
 using Microsoft.Xna.Framework;
@@ -20,8 +21,8 @@ namespace MatchThree.Core.Scene
             var gemFactory = new RandomGemFactory(Content.Load<Texture2D>(GameResource.Gem1Path),
                 Content.Load<Texture2D>(GameResource.Gem2Path), Content.Load<Texture2D>(GameResource.Gem3Path),
                 Content.Load<Texture2D>(GameResource.Gem4Path), Content.Load<Texture2D>(GameResource.Gem5Path));
-            var board = new Board(Content.Load<Texture2D>(GameResource.CellPath), new Rectangle(50, 50, 2740, 2060), 30,
-                35, gemFactory);
+            var board = new Board(Content.Load<Texture2D>(GameResource.CellPath), new Rectangle(50, 50, 2740, 2060), 8,
+                8, gemFactory, vectorInput);
             UpdateDrawables.Add(board);
             UpdateDrawables.Add(vectorInput);
         }

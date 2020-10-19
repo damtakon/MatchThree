@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MatchThree.Core.Interface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -25,7 +26,13 @@ namespace MatchThree.Core.Scene
         public virtual void UnloadContent()
         {
             Content?.Unload();
+            foreach (var item in UpdateDrawables)
+            {
+                if (item is IDisposable dispose)
+                    dispose.Dispose();
+            }
             UpdateDrawables.Clear();
+            GC.Collect();
         }
 
         public virtual void Update(GameTime gameTime)

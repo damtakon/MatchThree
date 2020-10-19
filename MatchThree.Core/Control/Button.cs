@@ -1,4 +1,5 @@
 ﻿using System;
+using MatchThree.Core.Extension;
 using MatchThree.Core.Input;
 using MatchThree.Core.Interface;
 using Microsoft.Xna.Framework;
@@ -6,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MatchThree.Core.Control
 {
-    public class Button : IUpdateDrawable
+    public class Button : IUpdateDrawable, IDisposable
     {
         protected SpriteFont Font;
         protected string Text;
@@ -36,7 +37,7 @@ namespace MatchThree.Core.Control
         {
             Text = text;
             var measureString = Font.MeasureString(Text);
-            ClickBox = new Rectangle((int)Position.X, (int)Position.Y, (int)measureString.X, (int)measureString.Y);
+            ClickBox = Position.CreateRectangle((int)measureString.X, (int)measureString.Y);
         }
 
         protected virtual void VectorInputOnPress(Vector2 position)
@@ -68,6 +69,7 @@ namespace MatchThree.Core.Control
             if (IsSubscribed)
             {
                 VectorInput.Press -= VectorInputOnPress;
+                VectorInput.Move -= VectorInputOnMove;
                 IsSubscribed = false;
             }
         }
@@ -80,6 +82,11 @@ namespace MatchThree.Core.Control
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.DrawString(Font, Text, Position, CurrentColor);
+        }
+
+        public void Dispose()
+        {
+            UnSubscribe();
         }
     }
 }

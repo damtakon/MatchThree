@@ -1,4 +1,4 @@
-﻿namespace MatchThree.Core
+﻿namespace MatchThree.Core.Enum
 {
     public enum SceneEnum
     {

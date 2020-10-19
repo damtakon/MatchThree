@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MatchThree.Core.Enum;
 using MatchThree.Core.Scene;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

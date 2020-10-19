@@ -7,12 +7,11 @@ namespace MatchThree.Core
 {
     public class MainGame : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Action<ContentManager> _loadContent;
         private Action<GameWindow> _autoFacInit;
         private Texture2D _background;
-        private Matrix _transformMatrix;
+        private readonly Matrix _transformMatrix;
 
         /// <summary>
         /// Main game scene
@@ -22,7 +21,7 @@ namespace MatchThree.Core
         public MainGame(Action<ContentManager> loadContent = null, Action<GameWindow> autoFacInit = null)
         {
             //Main graphics settings
-            _graphics = new GraphicsDeviceManager(this)
+            var graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
                 PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
@@ -34,10 +33,10 @@ namespace MatchThree.Core
             //    PreferredBackBufferHeight = 1080
             //};
 
-            var scaleX = _graphics.PreferredBackBufferWidth / Global.VirtualWidth;
-            var scaleY = _graphics.PreferredBackBufferHeight / Global.VirtualHeight;
-            var scaleX2 = Global.VirtualWidth / _graphics.PreferredBackBufferWidth;
-            var scaleY2 = Global.VirtualHeight / _graphics.PreferredBackBufferHeight;
+            var scaleX = graphics.PreferredBackBufferWidth / Global.VirtualWidth;
+            var scaleY = graphics.PreferredBackBufferHeight / Global.VirtualHeight;
+            var scaleX2 = Global.VirtualWidth / graphics.PreferredBackBufferWidth;
+            var scaleY2 = Global.VirtualHeight / graphics.PreferredBackBufferHeight;
             _transformMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
             Global.ScaleMatrix = Matrix.CreateScale(scaleX2, scaleY2, 1.0f);
             Content.RootDirectory = "Content";
