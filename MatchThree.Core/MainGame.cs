@@ -1,4 +1,5 @@
 ﻿using System;
+using MatchThree.Core.Enum;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,36 +12,28 @@ namespace MatchThree.Core
         private Action<ContentManager> _loadContent;
         private Action<GameWindow> _autoFacInit;
         private Texture2D _background;
-        private readonly Matrix _transformMatrix;
+        private Matrix _transformMatrix;
 
         /// <summary>
         /// Main game scene
         /// </summary>
         /// <param name="loadContent">Action for loading any instance if needed (can be null)</param>
         /// <param name="autoFacInit">Action for autofac initialize any instance if needed (can be null)</param>
-        public MainGame(Action<ContentManager> loadContent = null, Action<GameWindow> autoFacInit = null)
+        public MainGame(PlatformEnum platformEnum, Action<ContentManager> loadContent = null,
+            Action<GameWindow> autoFacInit = null)
         {
-            //Main graphics settings
             var graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
                 PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
             };
 
-            var scaleX = graphics.PreferredBackBufferWidth / Global.VirtualWidth;
-            var scaleY = graphics.PreferredBackBufferHeight / Global.VirtualHeight;
-            var scaleX2 = Global.VirtualWidth / graphics.PreferredBackBufferWidth;
-            var scaleY2 = Global.VirtualHeight / graphics.PreferredBackBufferHeight;
-            _transformMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
-            Global.ScaleMatrix = Matrix.CreateScale(scaleX2, scaleY2, 1.0f);
             Content.RootDirectory = "Content";
             Window.Title = "Simple Match Three for Game Forest";
-            Window.Position = Point.Zero;
-            Window.IsBorderless = true;
-            Window.AllowAltF4 = false;
+            if(platformEnum == PlatformEnum.Windows)
+                Global.SetWindowsVariables(Window);
             _loadContent = loadContent;
             _autoFacInit = autoFacInit;
-            
         }
 
         protected override void Initialize()
@@ -55,6 +48,14 @@ namespace MatchThree.Core
             _loadContent = null;
             _autoFacInit?.Invoke(Window);
             _autoFacInit = null;
+
+            var scaleX = Window.ClientBounds.Width / Global.VirtualWidth;
+            var scaleY = Window.ClientBounds.Height / Global.VirtualHeight;
+            var scaleX2 = Global.VirtualWidth / Window.ClientBounds.Width;
+            var scaleY2 = Global.VirtualHeight / Window.ClientBounds.Height;
+            _transformMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+            Global.ScaleMatrix = Matrix.CreateScale(scaleX2, scaleY2, 1.0f);
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _background = Content.Load<Texture2D>(GameResource.BackgroundPath);
             SceneManager.LoadContent(Content);

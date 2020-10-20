@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using MatchThree.Core.Control;
-using MatchThree.Core.Enum;
 using MatchThree.Core.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

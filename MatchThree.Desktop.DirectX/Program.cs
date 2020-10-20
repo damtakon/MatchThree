@@ -1,5 +1,6 @@
 ﻿using System;
 using MatchThree.Core;
+using MatchThree.Core.Enum;
 
 namespace MatchThree.Desktop.DirectX
 {
@@ -8,7 +9,7 @@ namespace MatchThree.Desktop.DirectX
         [STAThread]
         private static void Main()
         {
-            using var game = new MainGame(Content.Load, AutoFacDesktop.Register);
+            using var game = new MainGame(PlatformEnum.Windows, Content.Load, AutoFacDesktop.Register);
             game.Run();
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using MatchThree.Core.Control;
-using MatchThree.Core.Enum;
 using MatchThree.Core.Extension;
 using MatchThree.Core.Input;
 using MatchThree.Core.MatchThree;

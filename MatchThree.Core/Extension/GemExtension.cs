@@ -71,7 +71,7 @@ namespace MatchThree.Core.Extension
         /// <param name="gems">Gem grid on the board</param>
         /// <param name="recalculate">List of gems for which you need to recalculate</param>
         /// <returns>List of events for destroying lines</returns>
-        public static List<LineDestroyEventArgs> FindMatches(this Gem[,] gems, List<Gem> recalculate)
+        public static List<LineDestroyEventArgs> FindMatches(this Gem[,] gems, IEnumerable<Gem> recalculate)
         {
             var lists = new List<LineDestroyEventArgs>();
             foreach (var gem in recalculate)

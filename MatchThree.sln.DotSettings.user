@@ -1,0 +1,11 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/Highlighting/AnalysisEnabled/@EntryValue">VISIBLE_FILES</s:String>
+	<s:String x:Key="/Default/RunConfigs/Active/@EntryValue">8C4C0D7AA3C1A74FA1F2592DD6F5B5DE</s:String>
+	<s:Boolean x:Key="/Default/RunConfigs/Config/=8C4C0D7AA3C1A74FA1F2592DD6F5B5DE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/RunConfigs/Config/=8C4C0D7AA3C1A74FA1F2592DD6F5B5DE/Name/@EntryValue">MatchThree.Desktop.DirectX</s:String>
+	<s:String x:Key="/Default/RunConfigs/Config/=8C4C0D7AA3C1A74FA1F2592DD6F5B5DE/ProjectGuid/@EntryValue">EBE649E5F595554DAC367E55D461EBF8</s:String>
+	<s:String x:Key="/Default/RunConfigs/Config/=8C4C0D7AA3C1A74FA1F2592DD6F5B5DE/Type/@EntryValue">project</s:String>
+	<s:Boolean x:Key="/Default/RunConfigs/Config/=D85E4542BC5ED24D9C05B7D32FE1EF41/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/RunConfigs/Config/=D85E4542BC5ED24D9C05B7D32FE1EF41/Name/@EntryValue">MatchThree.Android</s:String>
+	<s:String x:Key="/Default/RunConfigs/Config/=D85E4542BC5ED24D9C05B7D32FE1EF41/ProjectGuid/@EntryValue">EAFC89DE7EDBB542AAF737A2AE0AF458</s:String>
+	<s:String x:Key="/Default/RunConfigs/Config/=D85E4542BC5ED24D9C05B7D32FE1EF41/Type/@EntryValue">project</s:String></wpf:ResourceDictionary>

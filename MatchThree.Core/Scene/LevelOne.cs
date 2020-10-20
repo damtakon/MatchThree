@@ -6,8 +6,6 @@ using MatchThree.Core.MatchThree.Bonus;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MatchThree.Core.Enum;
-
 #if DEBUG
 using Microsoft.Xna.Framework.Input;
 
