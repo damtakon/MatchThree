@@ -6,6 +6,7 @@ namespace MatchThree.Core.MatchThree.Bonus
 {
     public sealed class BombBonus : GemBonusBase
     {
+        private double _delay = 250;
         public BombBonus(Board board, Texture2D texture2D, Rectangle gemBox, int xPosition, int yPosition) : base(board,
             texture2D, gemBox, xPosition, yPosition)
         {
@@ -16,7 +17,9 @@ namespace MatchThree.Core.MatchThree.Bonus
             switch (State)
             {
                 case GemBonusState.Idle:
-                    ChangeState(GemBonusState.Run);
+                    _delay -= gameTime.ElapsedGameTime.TotalMilliseconds;
+                    if(_delay < 0)
+                        ChangeState(GemBonusState.Run);
                     break;
                 case GemBonusState.Run:
                     var columns = cells.GetLength(0);

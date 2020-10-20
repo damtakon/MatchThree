@@ -16,7 +16,7 @@ namespace MatchThree.Core.MatchThree
         protected Vector2 Size;
         protected Rectangle EndPosition;
         protected GemState GemState;
-        protected int Speed = 1000;
+        protected int Speed = 2500;
         protected Color GemColor;
         protected float DestroyStep;
 
@@ -45,7 +45,7 @@ namespace MatchThree.Core.MatchThree
             GemState = GemState.Move;
             GemColor = Color.White;
             Size = new Vector2(startPosition.Width, startPosition.Height);
-            DestroyStep = startPosition.Height * 2f;
+            DestroyStep = startPosition.Height * 3f;
         }
 
         public void Update(GameTime gameTime)
