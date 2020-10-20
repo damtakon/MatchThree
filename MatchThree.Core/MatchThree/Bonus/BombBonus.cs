@@ -30,7 +30,7 @@ namespace MatchThree.Core.MatchThree.Bonus
                             Board.DestroyGem(XPosition + 1, YPosition + 1);
                     }
 
-                    if (XPosition - 1 > 0)
+                    if (XPosition - 1 >= 0)
                     {
                         Board.DestroyGem(XPosition - 1, YPosition);
                         if (YPosition - 1 >= 0)
