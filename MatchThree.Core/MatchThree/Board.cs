@@ -12,6 +12,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MatchThree.Core.MatchThree
 {
+    /// <summary>
+    /// Game board
+    /// </summary>
     public class Board : IUpdateDrawable, IDisposable
     {
         protected Texture2D CellTexture2D;
@@ -73,6 +76,12 @@ namespace MatchThree.Core.MatchThree
             VectorInput.Press += VectorInputOnPress;
         }
 
+        /// <summary>
+        /// Gem state change handling
+        /// </summary>
+        /// <param name="gem">Gem whose state has changed</param>
+        /// <param name="lastState">Last gem state</param>
+        /// <param name="currentState">Current gem state</param>
         protected virtual void OnChangeGemState(Gem gem, GemState lastState, GemState currentState)
         {
             if ((lastState == GemState.Move || lastState == GemState.Swap) && currentState == GemState.Idle)
@@ -84,7 +93,7 @@ namespace MatchThree.Core.MatchThree
                     var first = Recalculate.FirstOrDefault();
                     var two = Recalculate.LastOrDefault();
                     BoardState = BoardState.Idle;
-                    if (!FindMatches() && lastState == GemState.Swap)
+                    if (!FindMatchesAndDestroy() && lastState == GemState.Swap)
                         GemSwap(first, two, GemState.Move);
                 }
             }
@@ -100,6 +109,9 @@ namespace MatchThree.Core.MatchThree
             }
         }
 
+        /// <summary>
+        /// Creating new missing elements and applying gravity
+        /// </summary>
         protected virtual void CreateNew()
         {
             for (var x = 0; x < Columns; x++)
@@ -129,6 +141,11 @@ namespace MatchThree.Core.MatchThree
             BoardState = BoardState.Move;
         }
 
+        /// <summary>
+        /// Create gem
+        /// </summary>
+        /// <param name="x">X gem position</param>
+        /// <param name="y">Y gem position</param>
         private void CreateGem(int x, int y)
         {
             Gems[x, y] = GemFactory.Create(CreateGemRectangle(x, y));
@@ -138,11 +155,22 @@ namespace MatchThree.Core.MatchThree
             GemOnMove++;
         }
 
+        /// <summary>
+        /// Create gem rectangle
+        /// </summary>
+        /// <param name="x">X gem position</param>
+        /// <param name="y">Y gem position</param>
+        /// <returns></returns>
         private Rectangle CreateGemRectangle(int x, int y)
         {
             return new Rectangle(Cells[x, y].X + GemOffset, Cells[x, y].Y + GemOffset, GemSize, GemSize);
         }
 
+
+        /// <summary>
+        /// Handling clicks from the application
+        /// </summary>
+        /// <param name="position">Click position</param>
         protected virtual void VectorInputOnPress(Vector2 position)
         {
             if (BoardState != BoardState.Idle)
@@ -188,6 +216,13 @@ namespace MatchThree.Core.MatchThree
             }
         }
 
+
+        /// <summary>
+        /// Swap gem
+        /// </summary>
+        /// <param name="gemOne">First gem</param>
+        /// <param name="gemTwo">Second gem</param>
+        /// <param name="state">Gem states</param>
         protected virtual void GemSwap(Gem gemOne, Gem gemTwo, GemState state)
         {
             Gems[gemOne.XPosition, gemOne.YPosition] = gemTwo;
@@ -197,40 +232,22 @@ namespace MatchThree.Core.MatchThree
             gemOne.Swap(gemTwo, state);
         }
 
-        protected virtual bool FindMatches()
+
+        /// <summary>
+        /// Matching and Destruction
+        /// </summary>
+        /// <returns>Did you manage to find the lines</returns>
+        protected virtual bool FindMatchesAndDestroy()
         {
-            var lists = new List<LineDestroyEventArgs>();
-            foreach (var gem in Recalculate)
-            {
-                var matchLine = new List<Gem>();
+            var matches = Gems.FindMatches(Recalculate);
 
-                if (lists.Any(events => events.Line.Any(x => ReferenceEquals(x, gem))))
-                    continue;
-
-                var matchLineHorizontal = FindMatchLine(gem, Right, Left);
-                var matchLineVertical = FindMatchLine(gem, Bottom, Top);
-
-                if (matchLineHorizontal != null)
-                    matchLine.AddRange(matchLineHorizontal);
-                if (matchLineVertical != null)
-                    matchLine.AddRange(matchLineVertical);
-
-                if (matchLine.Count > 0)
-                    lists.Add(new LineDestroyEventArgs(matchLine, gem));
-            }
-
-            var destroyed = new List<Gem>();
-            foreach (var destroy in lists)
+            foreach (var destroy in matches)
             {
                 BoardState = BoardState.Destroy;
-
                 GetBonus(destroy.Trigger);
                 LineDestroy?.Invoke(this, destroy);
                 foreach (var dGem in destroy.Line)
                 {
-                    if (destroyed.Any(x => ReferenceEquals(x, dGem)))
-                        continue;
-
                     if (destroy.TriggerNotDestroy && ReferenceEquals(destroy.Trigger, dGem))
                     {
                     }
@@ -238,37 +255,74 @@ namespace MatchThree.Core.MatchThree
                     {
                         DestroyGem(dGem);
                     }
-
-                    destroyed.Add(dGem);
                 }
             }
 
             Recalculate.Clear();
-            return lists.Count > 0;
+            return matches.Count > 0;
         }
 
-        protected virtual List<Gem> FindMatchLine(Gem gem, Func<Gem, int, (bool, Gem)> methodOne,
-            Func<Gem, int, (bool, Gem)> methodTwo)
+        /// <summary>
+        /// Collecting a bonus from a gem for execution
+        /// </summary>
+        /// <param name="gem"></param>
+        protected virtual void GetBonus(Gem gem)
         {
-            var destroy = new List<Gem> {gem};
-            Find(gem, destroy, methodOne, 1);
-            Find(gem, destroy, methodTwo, 1);
-
-            if (destroy.Count >= 3)
-                return destroy;
-
-            return null;
-        }
-
-        protected virtual void Find(Gem gem, List<Gem> destroy, Func<Gem, int, (bool, Gem)> method, int number)
-        {
-            var (result, nextGem) = method.Invoke(gem, number);
-
-            if (result)
+            if (gem.Bonus != null)
             {
-                destroy.Add(nextGem);
-                Find(gem, destroy, method, ++number);
+                AddBonuses.Add(gem.Bonus);
+                gem.Bonus.ChangeGemBonusState += BonusOnChangeGemBonusState;
+                gem.Bonus = null;
             }
+        }
+
+        /// <summary>
+        /// Destruction of the gem
+        /// </summary>
+        /// <param name="gem">gem</param>
+        protected virtual void DestroyGem(Gem gem)
+        {
+            if (gem == null)
+                return;
+
+            if (gem.GetState != GemState.Destroy)
+            {
+                GetBonus(gem);
+                GemOnDestroy++;
+                gem.Destroy();
+            }
+        }
+
+        /// <summary>
+        /// Destruction of the gem
+        /// </summary>
+        /// <param name="x">X gem position</param>
+        /// <param name="y">Y gem position</param>
+        public void DestroyGem(int x, int y)
+        {
+            DestroyGem(Gems[x, y]);
+        }
+
+        /// <summary>
+        /// Gem bonus state change processing
+        /// </summary>
+        /// <param name="gemBonus">Who executing</param>
+        /// <param name="currentState">Current state</param>
+        private void BonusOnChangeGemBonusState(GemBonusBase gemBonus, GemBonusState currentState)
+        {
+            if (currentState == GemBonusState.Finish)
+            {
+                gemBonus.ChangeGemBonusState -= BonusOnChangeGemBonusState;
+                RemoveBonuses.Add(gemBonus);
+            }
+        }
+
+        /// <summary>
+        /// Gem destroy event
+        /// </summary>
+        protected virtual void OnGemDestroy()
+        {
+            GemDestroy?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -305,66 +359,6 @@ namespace MatchThree.Core.MatchThree
                 bonus.Draw(spriteBatch, gameTime);
         }
 
-        protected virtual (bool, Gem) Left(Gem gem, int number)
-        {
-            return Right(gem, -number);
-        }
-
-        protected virtual (bool, Gem) Right(Gem gem, int number)
-        {
-            if (gem.XPosition + number >= Columns || gem.XPosition + number < 0)
-                return (false, null);
-            var nextGem = Gems[gem.XPosition + number, gem.YPosition];
-            return (gem.Equals(nextGem), nextGem);
-        }
-
-        protected virtual (bool, Gem) Top(Gem gem, int number)
-        {
-            return Bottom(gem, -number);
-        }
-
-        protected virtual (bool, Gem) Bottom(Gem gem, int number)
-        {
-            if (gem.YPosition + number >= Lines || gem.YPosition + number < 0)
-                return (false, null);
-            var nextGem = Gems[gem.XPosition, gem.YPosition + number];
-            return (gem.Equals(nextGem), nextGem);
-        }
-
-        protected void GetBonus(Gem gem)
-        {
-            if (gem.Bonus != null)
-            {
-                AddBonuses.Add(gem.Bonus);
-                gem.Bonus.ChangeGemBonusState += BonusOnChangeGemBonusState;
-                gem.Bonus = null;
-            }
-        }
-
-        private void BonusOnChangeGemBonusState(GemBonusBase gemBonus, GemBonusState currentState)
-        {
-            if (currentState == GemBonusState.Finish)
-                RemoveBonuses.Add(gemBonus);
-        }
-
-        protected void DestroyGem(Gem gem)
-        {
-            if(gem == null)
-                return;
-
-            if (gem.GetState != GemState.Destroy)
-            {
-                GetBonus(gem);
-                GemOnDestroy++;
-                gem.Destroy();
-            }
-        }
-
-        public void DestroyGem(int x, int y)
-        {
-            DestroyGem(Gems[x, y]);
-        }
-
         public void Dispose()
         {
             //Fix Memory leak observers
@@ -376,11 +370,6 @@ namespace MatchThree.Core.MatchThree
                 bonus.ChangeGemBonusState -= BonusOnChangeGemBonusState;
             foreach (var bonus in AddBonuses)
                 bonus.ChangeGemBonusState -= BonusOnChangeGemBonusState;
-        }
-
-        protected virtual void OnGemDestroy()
-        {
-            GemDestroy?.Invoke(this, EventArgs.Empty);
         }
     }
 }

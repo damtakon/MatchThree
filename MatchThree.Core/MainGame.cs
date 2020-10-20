@@ -27,12 +27,6 @@ namespace MatchThree.Core
                 PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height
             };
 
-            //_graphics = new GraphicsDeviceManager(this)
-            //{
-            //    PreferredBackBufferWidth = 1920,
-            //    PreferredBackBufferHeight = 1080
-            //};
-
             var scaleX = graphics.PreferredBackBufferWidth / Global.VirtualWidth;
             var scaleY = graphics.PreferredBackBufferHeight / Global.VirtualHeight;
             var scaleX2 = Global.VirtualWidth / graphics.PreferredBackBufferWidth;

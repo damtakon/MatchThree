@@ -26,6 +26,12 @@ namespace MatchThree.Core.MatchThree
         public Rectangle GemBox => Box;
         public GemState GetState => GemState;
 
+        /// <summary>
+        /// Gem state change handling
+        /// </summary>
+        /// <param name="gem">Gem whose state has changed</param>
+        /// <param name="lastState">Last gem state</param>
+        /// <param name="currentState">Current gem state</param>
         public delegate void ChangeGemStateHandler(Gem gem, GemState lastState, GemState currentState);
 
         public event ChangeGemStateHandler ChangeGemState;
@@ -67,6 +73,10 @@ namespace MatchThree.Core.MatchThree
             }
         }
 
+        /// <summary>
+        /// Gem state changes
+        /// </summary>
+        /// <param name="state">State</param>
         private void ChangeState(GemState state)
         {
             var lastState = GemState;
@@ -74,6 +84,13 @@ namespace MatchThree.Core.MatchThree
             OnChangeGemState(this, lastState, GemState);
         }
 
+
+        /// <summary>
+        /// Single-axis travel application
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
+        /// <param name="start">Start point</param>
+        /// <param name="end">End point</param>
         private void Move(GameTime gameTime, ref float start, ref int end)
         {
             if (Math.Abs(start - end) > 0.1)
@@ -91,11 +108,19 @@ namespace MatchThree.Core.MatchThree
             }
         }
 
+        /// <summary>
+        /// Destruction of the gem
+        /// </summary>
         public void Destroy()
         {
             GemState = GemState.Destroy;
         }
 
+        /// <summary>
+        /// Swapping two gems
+        /// </summary>
+        /// <param name="gem">Second gem for swap</param>
+        /// <param name="state">State gems</param>
         public void Swap(Gem gem, GemState state)
         {
             var endPosition = gem.EndPosition;
@@ -105,6 +130,13 @@ namespace MatchThree.Core.MatchThree
             Move(x, y, endPosition, state);
         }
 
+        /// <summary>
+        /// Move a gem to a specific position
+        /// </summary>
+        /// <param name="x">X gem board position</param>
+        /// <param name="y">Y gem board position</param>
+        /// <param name="position">Coordinate where the gem should be at the end of the path</param>
+        /// <param name="state">State gem</param>
         public void Move(int x, int y, Rectangle position, GemState state)
         {
             if (Bonus != null)
@@ -119,6 +151,10 @@ namespace MatchThree.Core.MatchThree
             EndPosition = position;
         }
 
+        /// <summary>
+        /// Set paint color gem
+        /// </summary>
+        /// <param name="color">Paint color</param>
         public void SetColor(Color color)
         {
             GemColor = color;

@@ -1,5 +1,4 @@
-﻿using System;
-using MatchThree.Core.Enum;
+﻿using MatchThree.Core.Enum;
 using MatchThree.Core.Extension;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

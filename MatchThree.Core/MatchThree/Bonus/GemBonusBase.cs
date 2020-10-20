@@ -13,6 +13,11 @@ namespace MatchThree.Core.MatchThree.Bonus
         public int XPosition;
         public int YPosition;
 
+        /// <summary>
+        /// Gem bonus state change processing
+        /// </summary>
+        /// <param name="gemBonus">Who executing</param>
+        /// <param name="currentState">Current state</param>
         public delegate void ChangeGemBonusStateHandler(GemBonusBase gemBonus, GemBonusState currentState);
 
         public event ChangeGemBonusStateHandler ChangeGemBonusState;
@@ -31,6 +36,10 @@ namespace MatchThree.Core.MatchThree.Bonus
 
         public abstract void Update(GameTime gameTime, Rectangle[,] cells);
 
+        /// <summary>
+        /// Position change
+        /// </summary>
+        /// <param name="gemBox">Position gem</param>
         public void ChangePosition(Rectangle gemBox)
         {
             Box.X = (int)(gemBox.X + gemBox.Width * 0.25);
@@ -42,6 +51,10 @@ namespace MatchThree.Core.MatchThree.Bonus
             spriteBatch.Draw(Texture2D, Box, Color.White);
         }
 
+        /// <summary>
+        /// Change of state
+        /// </summary>
+        /// <param name="state">State</param>
         protected void ChangeState(GemBonusState state)
         {
             State = state;
