@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="Activity.cs" />
     <Compile Include="AutoFacAndroid.cs" />
-    <Compile Include="Input\MouseInput.cs" />
+    <Compile Include="Input\TouchInput.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
