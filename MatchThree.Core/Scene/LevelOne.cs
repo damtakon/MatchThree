@@ -60,7 +60,7 @@ namespace MatchThree.Core.Scene
 
         private void OnTimeExpired()
         {
-            SceneManager.ChangeScene(SceneEnum.GameOver);
+            SceneManager.ChangeScene(typeof(GameOver));
         }
 
         public override void Update(GameTime gameTime)
@@ -68,7 +68,7 @@ namespace MatchThree.Core.Scene
             base.Update(gameTime);
 #if DEBUG
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                SceneManager.ChangeScene(SceneEnum.MainMenu);
+                SceneManager.ChangeScene(typeof(GameOver));
 #endif
         }
 

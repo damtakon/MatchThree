@@ -36,7 +36,7 @@ namespace MatchThree.Core.Scene
 
         private void PlayClicked()
         {
-            SceneManager.ChangeScene(SceneEnum.LevelOne);
+            SceneManager.ChangeScene(typeof(LevelOne));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MatchThree.Core.Enum;
 using MatchThree.Core.Scene;
 using Microsoft.Xna.Framework;
@@ -11,9 +12,9 @@ namespace MatchThree.Core
     {
         private static GameSceneBase _currentScene;
         private static ContentManager _contentManager;
-        private static SceneEnum _scene;
+        private static Type _scene;
         private static bool _needChangeScene;
-        private static Dictionary<SceneEnum, GameSceneBase> _gameScenes;
+        private static Dictionary<Type, GameSceneBase> _gameScenes;
 
         /// <summary>
         /// Init all scene and main scene
@@ -21,12 +22,12 @@ namespace MatchThree.Core
         public static void Init()
         {
             _currentScene = new MainMenu();
-            _scene = SceneEnum.MainMenu;
-            _gameScenes = new Dictionary<SceneEnum, GameSceneBase>
+            _scene = typeof(MainMenu);
+            _gameScenes = new Dictionary<Type, GameSceneBase>
             {
-                {SceneEnum.MainMenu, new MainMenu()},
-                {SceneEnum.LevelOne, new LevelOne()},
-                {SceneEnum.GameOver, new GameOver()}
+                {typeof(MainMenu), new MainMenu()},
+                {typeof(LevelOne), new LevelOne()},
+                {typeof(GameOver), new GameOver()}
             };
 
         }
@@ -38,12 +39,12 @@ namespace MatchThree.Core
             _currentScene.LoadContent(contentManager);
         }
 
-        public static void ChangeScene(SceneEnum scene)
+        public static void ChangeScene(Type sceneType)
         {
-            if (_scene != scene)
+            if (_scene != sceneType)
             {
                 _needChangeScene = true;
-                _scene = scene;
+                _scene = sceneType;
             }
         }
 
