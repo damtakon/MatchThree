@@ -11,7 +11,7 @@ namespace MatchThree.Core.MatchThree.Bonus
         private Rectangle _breakerBoxPlus;
         private Rectangle _breakerBoxMinus;
         private readonly bool _horizontal;
-        private const int Speed = 6000;
+        private const int Speed = 3000;
         private Vector2 _plusVector;
         private Vector2 _minusVector;
         private Rectangle _plus;
