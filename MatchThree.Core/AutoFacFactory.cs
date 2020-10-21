@@ -27,14 +27,14 @@ namespace MatchThree.Core
 
         public static object[] TypesResolve(params Type[] types)
         {
-            var typesResolve = new List<object>();
+            var resolvedTypes = new List<object>();
             using (var scope = _container.BeginLifetimeScope())
             {
                 foreach (var type in types)
-                    typesResolve.Add(scope.Resolve(type));
+                    resolvedTypes.Add(scope.Resolve(type));
             }
 
-            return typesResolve.ToArray();
+            return resolvedTypes.ToArray();
         }
     }
 }
