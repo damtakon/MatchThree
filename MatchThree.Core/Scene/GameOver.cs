@@ -41,7 +41,7 @@ namespace MatchThree.Core.Scene
 
         private void OkClicked()
         {
-            SceneManager.ChangeScene(typeof(MainMenu));
+            SceneManager.ChangeScene<MainMenu>();
         }
     }
 }

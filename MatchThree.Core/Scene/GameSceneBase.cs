@@ -31,6 +31,7 @@ namespace MatchThree.Core.Scene
                 if (item is IDisposable dispose)
                     dispose.Dispose();
             }
+
             UpdateDrawables.Clear();
             GC.Collect();
         }

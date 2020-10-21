@@ -27,8 +27,9 @@ namespace MatchThree.Core
             _currentScene.LoadContent(contentManager);
         }
 
-        public static void ChangeScene(Type sceneType)
+        public static void ChangeScene<T>() where T : GameSceneBase
         {
+            var sceneType = typeof(T);
             if (_scene != sceneType)
             {
                 _needChangeScene = true;
