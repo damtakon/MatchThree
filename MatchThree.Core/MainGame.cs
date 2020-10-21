@@ -38,7 +38,6 @@ namespace MatchThree.Core
 
         protected override void Initialize()
         {
-            SceneManager.Init();
             base.Initialize();
         }
 

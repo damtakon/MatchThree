@@ -18,15 +18,17 @@ namespace MatchThree.Core.Scene
         private readonly List<IGemBonusFactory> _bonusFactories = new List<IGemBonusFactory>();
         private Board _board;
         private Score _score;
+        private readonly VectorInput _vectorInput;
+
+        public LevelOne(VectorInput vectorInput)
+        {
+            _vectorInput = vectorInput;
+        }
 
         public override void LoadContent(ContentManager contentManager)
         {
             base.LoadContent(contentManager);
             var font = Content.Load<SpriteFont>(GameResource.FontPath);
-
-            VectorInput vectorInput;
-            using (var scope = AutoFacFactory.Container.BeginLifetimeScope())
-                vectorInput = scope.Resolve<VectorInput>();
 
             var gemFactory = new RandomGemFactory(Content.Load<Texture2D>(GameResource.Gem1Path),
                 Content.Load<Texture2D>(GameResource.Gem2Path), Content.Load<Texture2D>(GameResource.Gem3Path),
@@ -44,7 +46,7 @@ namespace MatchThree.Core.Scene
 
             var cellTexture2D = Content.Load<Texture2D>(GameResource.CellPath);
             var boardContainer = new Rectangle(50, 50, 2740, 2060);
-            _board = new Board(cellTexture2D, boardContainer, 8, 8, gemFactory, vectorInput);
+            _board = new Board(cellTexture2D, boardContainer, 8, 8, gemFactory, _vectorInput);
             foreach (var bonus in _bonusFactories)
                 _board.LineDestroy += bonus.LineDestroy;
             _board.LineDestroy += _score.LineDestroy;
@@ -53,7 +55,7 @@ namespace MatchThree.Core.Scene
             UpdateDrawables.Add(timer);
             UpdateDrawables.Add(_score);
             UpdateDrawables.Add(_board);
-            UpdateDrawables.Add(vectorInput);
+            UpdateDrawables.Add(_vectorInput);
         }
 
         private void OnTimeExpired()
